@@ -39,8 +39,8 @@ const DealDetailsModal: React.FC<DealDetailsModalProps> = ({ open, onOpenChange,
     
     if (deal.discount_percentage) {
       let discount = (amount * deal.discount_percentage) / 100;
-      if (deal.max_discount) {
-        discount = Math.min(discount, deal.max_discount);
+      if (deal.maximum_discount) {
+        discount = Math.min(discount, deal.maximum_discount);
       }
       return discount;
     }
@@ -85,19 +85,15 @@ const DealDetailsModal: React.FC<DealDetailsModalProps> = ({ open, onOpenChange,
                     <p className="font-medium">{deal.merchants.name}</p>
                     <p className="text-sm text-muted-foreground">{deal.merchants.category}</p>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    <span>{deal.merchants.rating.toFixed(1)}</span>
-                  </div>
                 </div>
               )}
               
               <div className="grid grid-cols-2 gap-4 text-sm">
-                {deal.min_spend > 0 && (
+                {deal.minimum_spend > 0 && (
                   <div>
                     <span className="text-muted-foreground">Min spend:</span>
                     <CurrencyDisplay 
-                      amount={deal.min_spend} 
+                      amount={deal.minimum_spend} 
                       className="font-medium block" 
                       showToggle={false} 
                     />
@@ -128,16 +124,16 @@ const DealDetailsModal: React.FC<DealDetailsModalProps> = ({ open, onOpenChange,
                 <Input
                   id="amount"
                   type="number"
-                  placeholder={deal.min_spend > 0 ? deal.min_spend.toString() : "1000"}
+                  placeholder={deal.minimum_spend > 0 ? deal.minimum_spend.toString() : "1000"}
                   value={purchaseAmount}
                   onChange={(e) => setPurchaseAmount(e.target.value)}
-                  min={deal.min_spend || 1}
+                  min={deal.minimum_spend || 1}
                   step="1"
                   required
                 />
               </div>
 
-              {purchaseAmount && parseFloat(purchaseAmount) >= (deal.min_spend || 0) && (
+              {purchaseAmount && parseFloat(purchaseAmount) >= (deal.minimum_spend || 0) && (
                 <div className="bg-green-50 p-4 rounded-lg space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Original Amount:</span>
@@ -175,7 +171,7 @@ const DealDetailsModal: React.FC<DealDetailsModalProps> = ({ open, onOpenChange,
                   disabled={
                     isUsingDeal || 
                     !purchaseAmount || 
-                    parseFloat(purchaseAmount) < (deal.min_spend || 0)
+                    parseFloat(purchaseAmount) < (deal.minimum_spend || 0)
                   }
                   className="gap-2"
                 >

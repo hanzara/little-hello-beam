@@ -3,56 +3,13 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { useToast } from './use-toast';
+import type { Database } from '@/integrations/supabase/types';
 
-export interface Budget {
-  id: string;
-  user_id: string;
-  month: string;
-  total_income: number;
-  total_budget: number;
-  created_at: string;
-  updated_at: string;
-}
+type Budget = Database['public']['Tables']['user_budgets']['Row'];
+type BudgetCategory = Database['public']['Tables']['budget_categories']['Row'];
 
-export interface BudgetCategory {
-  id: string;
-  budget_id: string;
-  category: string;
-  budget_limit: number;
-  spent_amount: number;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface BudgetAlert {
-  id: string;
-  user_id: string;
-  budget_id?: string;
-  alert_type: string;
-  category?: string;
-  message: string;
-  percentage_used?: number;
-  is_read: boolean;
-  created_at: string;
-}
-
-export interface Transaction {
-  id: string;
-  user_id: string;
-  amount: number;
-  transaction_type: string;
-  category: string;
-  subcategory?: string;
-  description?: string;
-  transaction_date: string;
-  payment_method?: string;
-  auto_categorized: boolean;
-  budget_category?: string;
-  merchant_name?: string;
-  location?: string;
-  notes?: string;
-  created_at: string;
-}
+export type BudgetAlert = Database['public']['Tables']['budget_alerts']['Row'];
+export type Transaction = Database['public']['Tables']['financial_transactions']['Row'];
 
 export const useBudgetTracker = () => {
   const { user } = useAuth();

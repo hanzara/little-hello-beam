@@ -2,84 +2,17 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { useToast } from './use-toast';
+import type { Database } from '@/integrations/supabase/types';
 
-export interface Merchant {
-  id: string;
-  name: string;
-  category: string;
-  logo_url?: string;
-  description?: string;
-  rating: number;
-  commission_rate: number;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface Deal {
-  id: string;
-  merchant_id: string;
-  title: string;
-  description: string;
-  discount_percentage?: number;
-  discount_amount?: number;
-  min_spend: number;
-  max_discount?: number;
-  terms_conditions?: string;
-  valid_from: string;
-  valid_until?: string;
-  usage_limit?: number;
-  used_count: number;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
+export type Deal = Database['public']['Tables']['deals']['Row'] & {
   merchants?: Merchant;
-}
-
-export interface BillProvider {
-  id: string;
-  name: string;
-  category: string;
-  logo_url?: string;
-  supported_fields: string[];
-  provider_endpoint?: string;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface BillPayment {
-  id: string;
-  user_id: string;
-  provider_id: string;
-  account_number: string;
-  amount: number;
-  reference_number?: string;
-  payment_method: string;
-  status: string;
-  transaction_id?: string;
-  provider_response?: any;
-  fee_amount: number;
-  total_amount: number;
-  scheduled_for?: string;
-  processed_at?: string;
-  created_at: string;
-  updated_at: string;
+};
+export type Merchant = Database['public']['Tables']['merchants']['Row'];
+export type BillProvider = Database['public']['Tables']['bill_providers']['Row'];
+type UserBillPayment = Database['public']['Tables']['user_bill_payments']['Row'] & {
   bill_providers?: BillProvider;
-}
-
-export interface DealUsage {
-  id: string;
-  user_id: string;
-  deal_id: string;
-  merchant_id: string;
-  original_amount: number;
-  discount_amount: number;
-  final_amount: number;
-  commission_earned: number;
-  transaction_reference?: string;
-  used_at: string;
-}
+};
+type UserDealUsage = Database['public']['Tables']['user_deal_usage']['Row'];
 
 export const useDealsAndBills = () => {
   const { user } = useAuth();
@@ -141,7 +74,7 @@ export const useDealsAndBills = () => {
       if (!user) return [];
       
       const { data, error } = await supabase
-        .from('bill_payments')
+        .from('user_bill_payments')
         .select(`
           *,
           bill_providers (*)
@@ -162,7 +95,7 @@ export const useDealsAndBills = () => {
       if (!user) return [];
       
       const { data, error } = await supabase
-        .from('deal_usage')
+        .from('user_deal_usage')
         .select(`
           *,
           deals (*),
@@ -208,11 +141,11 @@ export const useDealsAndBills = () => {
         throw new Error('This deal has expired');
       }
 
-      if (originalAmount < deal.min_spend) {
-        throw new Error(`Minimum spend is KES ${deal.min_spend}`);
+      if (originalAmount < deal.minimum_spend) {
+        throw new Error(`Minimum spend is KES ${deal.minimum_spend}`);
       }
 
-      if (deal.usage_limit && deal.used_count >= deal.usage_limit) {
+      if (deal.usage_limit && deal.current_usage >= deal.usage_limit) {
         throw new Error('This deal has reached its usage limit');
       }
 
@@ -220,8 +153,8 @@ export const useDealsAndBills = () => {
       let discountAmount = 0;
       if (deal.discount_percentage) {
         discountAmount = (originalAmount * deal.discount_percentage) / 100;
-        if (deal.max_discount) {
-          discountAmount = Math.min(discountAmount, deal.max_discount);
+        if (deal.maximum_discount) {
+          discountAmount = Math.min(discountAmount, deal.maximum_discount);
         }
       } else if (deal.discount_amount) {
         discountAmount = deal.discount_amount;
@@ -229,28 +162,24 @@ export const useDealsAndBills = () => {
 
       const finalAmount = originalAmount - discountAmount;
 
-      // Get merchant details for commission
+      // Get merchant details
       const { data: merchant, error: merchantError } = await supabase
         .from('merchants')
-        .select('commission_rate')
+        .select('*')
         .eq('id', merchantId)
         .single();
 
       if (merchantError) throw merchantError;
 
-      const commissionEarned = (originalAmount * merchant.commission_rate) / 100;
-
       // Record deal usage
       const { data, error } = await supabase
-        .from('deal_usage')
+        .from('user_deal_usage')
         .insert({
           user_id: user.id,
           deal_id: dealId,
           merchant_id: merchantId,
-          original_amount: originalAmount,
           discount_amount: discountAmount,
           final_amount: finalAmount,
-          commission_earned: commissionEarned,
         })
         .select()
         .single();
@@ -260,7 +189,7 @@ export const useDealsAndBills = () => {
       // Update deal usage count
       await supabase
         .from('deals')
-        .update({ used_count: deal.used_count + 1 })
+        .update({ current_usage: deal.current_usage + 1 })
         .eq('id', dealId);
 
       return { ...data, discountAmount, finalAmount };
@@ -302,14 +231,13 @@ export const useDealsAndBills = () => {
       const totalAmount = amount + feeAmount;
 
       const { data, error } = await supabase
-        .from('bill_payments')
+        .from('user_bill_payments')
         .insert({
           user_id: user.id,
-          provider_id: providerId,
+          bill_provider_id: providerId,
           account_number: accountNumber,
           amount: amount,
-          payment_method: paymentMethod,
-          fee_amount: feeAmount,
+          service_fee: feeAmount,
           total_amount: totalAmount,
           status: 'pending',
         })
@@ -322,11 +250,10 @@ export const useDealsAndBills = () => {
       // For now, we'll simulate processing
       setTimeout(async () => {
         await supabase
-          .from('bill_payments')
+          .from('user_bill_payments')
           .update({
             status: 'completed',
-            processed_at: new Date().toISOString(),
-            transaction_id: `TXN${Date.now()}`,
+            reference_number: `TXN${Date.now()}`,
           })
           .eq('id', data.id);
         

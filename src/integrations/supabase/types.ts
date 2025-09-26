@@ -113,6 +113,121 @@ export type Database = {
         }
         Relationships: []
       }
+      bill_providers: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          is_active: boolean
+          logo_url: string | null
+          name: string
+          service_fee: number | null
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          logo_url?: string | null
+          name: string
+          service_fee?: number | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          logo_url?: string | null
+          name?: string
+          service_fee?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      budget_alerts: {
+        Row: {
+          alert_type: string
+          budget_id: string | null
+          category: string | null
+          created_at: string
+          id: string
+          is_read: boolean
+          message: string
+          percentage_used: number | null
+          user_id: string
+        }
+        Insert: {
+          alert_type: string
+          budget_id?: string | null
+          category?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message: string
+          percentage_used?: number | null
+          user_id: string
+        }
+        Update: {
+          alert_type?: string
+          budget_id?: string | null
+          category?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message?: string
+          percentage_used?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_budget_alerts_budget"
+            columns: ["budget_id"]
+            isOneToOne: false
+            referencedRelation: "user_budgets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      budget_categories: {
+        Row: {
+          budget_id: string
+          budget_limit: number
+          category: string
+          created_at: string
+          id: string
+          spent_amount: number
+          updated_at: string
+        }
+        Insert: {
+          budget_id: string
+          budget_limit?: number
+          category: string
+          created_at?: string
+          id?: string
+          spent_amount?: number
+          updated_at?: string
+        }
+        Update: {
+          budget_id?: string
+          budget_limit?: number
+          category?: string
+          created_at?: string
+          id?: string
+          spent_amount?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_budget_categories_budget"
+            columns: ["budget_id"]
+            isOneToOne: false
+            referencedRelation: "user_budgets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chama_activities: {
         Row: {
           activity_type: string
@@ -1182,6 +1297,71 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      deals: {
+        Row: {
+          created_at: string
+          current_usage: number
+          description: string | null
+          discount_amount: number | null
+          discount_percentage: number | null
+          id: string
+          is_active: boolean
+          maximum_discount: number | null
+          merchant_id: string
+          minimum_spend: number | null
+          terms_conditions: string | null
+          title: string
+          updated_at: string
+          usage_limit: number | null
+          valid_from: string
+          valid_until: string
+        }
+        Insert: {
+          created_at?: string
+          current_usage?: number
+          description?: string | null
+          discount_amount?: number | null
+          discount_percentage?: number | null
+          id?: string
+          is_active?: boolean
+          maximum_discount?: number | null
+          merchant_id: string
+          minimum_spend?: number | null
+          terms_conditions?: string | null
+          title: string
+          updated_at?: string
+          usage_limit?: number | null
+          valid_from?: string
+          valid_until: string
+        }
+        Update: {
+          created_at?: string
+          current_usage?: number
+          description?: string | null
+          discount_amount?: number | null
+          discount_percentage?: number | null
+          id?: string
+          is_active?: boolean
+          maximum_discount?: number | null
+          merchant_id?: string
+          minimum_spend?: number | null
+          terms_conditions?: string | null
+          title?: string
+          updated_at?: string
+          usage_limit?: number | null
+          valid_from?: string
+          valid_until?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_deals_merchant"
+            columns: ["merchant_id"]
+            isOneToOne: false
+            referencedRelation: "merchants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       disputes: {
         Row: {
@@ -2807,6 +2987,39 @@ export type Database = {
         }
         Relationships: []
       }
+      merchants: {
+        Row: {
+          category: string
+          contact_info: Json | null
+          created_at: string
+          id: string
+          is_active: boolean
+          logo_url: string | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          contact_info?: Json | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          logo_url?: string | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          contact_info?: Json | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          logo_url?: string | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       mobile_money_accounts: {
         Row: {
           account_name: string | null
@@ -4165,6 +4378,86 @@ export type Database = {
         }
         Relationships: []
       }
+      user_bill_payments: {
+        Row: {
+          account_number: string
+          amount: number
+          bill_provider_id: string
+          created_at: string
+          id: string
+          reference_number: string | null
+          service_fee: number
+          status: string
+          total_amount: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          account_number: string
+          amount: number
+          bill_provider_id: string
+          created_at?: string
+          id?: string
+          reference_number?: string | null
+          service_fee?: number
+          status?: string
+          total_amount: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          account_number?: string
+          amount?: number
+          bill_provider_id?: string
+          created_at?: string
+          id?: string
+          reference_number?: string | null
+          service_fee?: number
+          status?: string
+          total_amount?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_user_bill_payments_provider"
+            columns: ["bill_provider_id"]
+            isOneToOne: false
+            referencedRelation: "bill_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_budgets: {
+        Row: {
+          created_at: string
+          id: string
+          month: string
+          total_budget: number
+          total_income: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          month: string
+          total_budget?: number
+          total_income?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          month?: string
+          total_budget?: number
+          total_income?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_challenge_completions: {
         Row: {
           answers: Json | null
@@ -4205,6 +4498,51 @@ export type Database = {
             columns: ["challenge_id"]
             isOneToOne: false
             referencedRelation: "learning_challenges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_deal_usage: {
+        Row: {
+          deal_id: string
+          discount_amount: number
+          final_amount: number
+          id: string
+          merchant_id: string
+          used_at: string
+          user_id: string
+        }
+        Insert: {
+          deal_id: string
+          discount_amount: number
+          final_amount: number
+          id?: string
+          merchant_id: string
+          used_at?: string
+          user_id: string
+        }
+        Update: {
+          deal_id?: string
+          discount_amount?: number
+          final_amount?: number
+          id?: string
+          merchant_id?: string
+          used_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_user_deal_usage_deal"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_user_deal_usage_merchant"
+            columns: ["merchant_id"]
+            isOneToOne: false
+            referencedRelation: "merchants"
             referencedColumns: ["id"]
           },
         ]

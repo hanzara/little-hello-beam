@@ -50,12 +50,9 @@ const DealsGrid: React.FC<DealsGridProps> = ({ deals, onDealClick }) => {
                 }
               </Badge>
               {deal.merchants && (
-                <div className="flex items-center gap-1">
-                  <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                  <span className="text-xs text-muted-foreground">
-                    {deal.merchants.rating.toFixed(1)}
-                  </span>
-                </div>
+                <Badge variant="secondary" className="text-xs">
+                  {deal.merchants.category}
+                </Badge>
               )}
             </div>
           </CardHeader>
@@ -76,13 +73,13 @@ const DealsGrid: React.FC<DealsGridProps> = ({ deals, onDealClick }) => {
               </div>
             )}
 
-            {deal.min_spend > 0 && (
+            {deal.minimum_spend > 0 && (
               <div className="text-sm">
                 <span className="text-muted-foreground">Min spend: </span>
                 <CurrencyDisplay 
-                  amount={deal.min_spend} 
+                  amount={deal.minimum_spend} 
                   className="font-medium" 
-                  showToggle={false} 
+                  showToggle={false}
                 />
               </div>
             )}

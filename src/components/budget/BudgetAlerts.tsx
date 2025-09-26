@@ -7,8 +7,7 @@ import {
   AlertTriangle, 
   TrendingDown, 
   X,
-  Bell,
-  ExclamationTriangle
+  Bell
 } from 'lucide-react';
 import { BudgetAlert, useBudgetTracker } from '@/hooks/useBudgetTracker';
 
@@ -22,7 +21,7 @@ const BudgetAlerts: React.FC<BudgetAlertsProps> = ({ alerts }) => {
   const getAlertIcon = (type: string) => {
     switch (type) {
       case 'overspend':
-        return <ExclamationTriangle className="h-4 w-4 text-red-600" />;
+        return <AlertTriangle className="h-4 w-4 text-red-600" />;
       case 'low_budget':
         return <AlertTriangle className="h-4 w-4 text-yellow-600" />;
       case 'recurring_reminder':
