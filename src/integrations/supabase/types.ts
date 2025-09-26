@@ -113,6 +113,48 @@ export type Database = {
         }
         Relationships: []
       }
+      audit_logs: {
+        Row: {
+          action: string
+          admin_id: string | null
+          created_at: string | null
+          id: string
+          ip_address: unknown | null
+          new_values: Json | null
+          old_values: Json | null
+          resource_id: string | null
+          resource_type: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          admin_id?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          new_values?: Json | null
+          old_values?: Json | null
+          resource_id?: string | null
+          resource_type?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          admin_id?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          new_values?: Json | null
+          old_values?: Json | null
+          resource_id?: string | null
+          resource_type?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       bill_providers: {
         Row: {
           category: string
@@ -1701,6 +1743,51 @@ export type Database = {
         }
         Relationships: []
       }
+      fraud_detection_logs: {
+        Row: {
+          action_taken: string | null
+          created_at: string | null
+          details: Json
+          event_type: string
+          id: string
+          ip_address: unknown | null
+          location_data: Json | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          risk_score: number | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_taken?: string | null
+          created_at?: string | null
+          details: Json
+          event_type: string
+          id?: string
+          ip_address?: unknown | null
+          location_data?: Json | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          risk_score?: number | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_taken?: string | null
+          created_at?: string | null
+          details?: Json
+          event_type?: string
+          id?: string
+          ip_address?: unknown | null
+          location_data?: Json | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          risk_score?: number | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       game_tournaments: {
         Row: {
           created_at: string | null
@@ -1899,6 +1986,57 @@ export type Database = {
           title?: string
           updated_at?: string | null
           verified_at?: string | null
+        }
+        Relationships: []
+      }
+      kyc_documents: {
+        Row: {
+          created_at: string | null
+          document_type: string
+          expires_at: string | null
+          file_name: string
+          file_path: string
+          file_size: number | null
+          id: string
+          mime_type: string | null
+          rejection_reason: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          document_type: string
+          expires_at?: string | null
+          file_name: string
+          file_path: string
+          file_size?: number | null
+          id?: string
+          mime_type?: string | null
+          rejection_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          document_type?: string
+          expires_at?: string | null
+          file_name?: string
+          file_path?: string
+          file_size?: number | null
+          id?: string
+          mime_type?: string | null
+          rejection_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -3173,6 +3311,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      notification_preferences: {
+        Row: {
+          chama_updates: boolean | null
+          created_at: string | null
+          email_notifications: boolean | null
+          id: string
+          loan_reminders: boolean | null
+          marketing_emails: boolean | null
+          push_notifications: boolean | null
+          security_alerts: boolean | null
+          sms_notifications: boolean | null
+          transaction_alerts: boolean | null
+          updated_at: string | null
+          user_id: string
+          weekly_summaries: boolean | null
+        }
+        Insert: {
+          chama_updates?: boolean | null
+          created_at?: string | null
+          email_notifications?: boolean | null
+          id?: string
+          loan_reminders?: boolean | null
+          marketing_emails?: boolean | null
+          push_notifications?: boolean | null
+          security_alerts?: boolean | null
+          sms_notifications?: boolean | null
+          transaction_alerts?: boolean | null
+          updated_at?: string | null
+          user_id: string
+          weekly_summaries?: boolean | null
+        }
+        Update: {
+          chama_updates?: boolean | null
+          created_at?: string | null
+          email_notifications?: boolean | null
+          id?: string
+          loan_reminders?: boolean | null
+          marketing_emails?: boolean | null
+          push_notifications?: boolean | null
+          security_alerts?: boolean | null
+          sms_notifications?: boolean | null
+          transaction_alerts?: boolean | null
+          updated_at?: string | null
+          user_id?: string
+          weekly_summaries?: boolean | null
+        }
+        Relationships: []
       }
       notifications: {
         Row: {
@@ -4881,6 +5067,93 @@ export type Database = {
         }
         Relationships: []
       }
+      user_security_settings: {
+        Row: {
+          account_locked_until: string | null
+          auto_logout_minutes: number | null
+          biometric_enabled: boolean | null
+          created_at: string | null
+          failed_pin_attempts: number | null
+          id: string
+          last_password_change: string | null
+          security_questions: Json | null
+          trusted_devices: Json | null
+          two_factor_enabled: boolean | null
+          two_factor_method: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          account_locked_until?: string | null
+          auto_logout_minutes?: number | null
+          biometric_enabled?: boolean | null
+          created_at?: string | null
+          failed_pin_attempts?: number | null
+          id?: string
+          last_password_change?: string | null
+          security_questions?: Json | null
+          trusted_devices?: Json | null
+          two_factor_enabled?: boolean | null
+          two_factor_method?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          account_locked_until?: string | null
+          auto_logout_minutes?: number | null
+          biometric_enabled?: boolean | null
+          created_at?: string | null
+          failed_pin_attempts?: number | null
+          id?: string
+          last_password_change?: string | null
+          security_questions?: Json | null
+          trusted_devices?: Json | null
+          two_factor_enabled?: boolean | null
+          two_factor_method?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_sessions: {
+        Row: {
+          created_at: string | null
+          device_info: Json | null
+          expires_at: string
+          id: string
+          ip_address: unknown | null
+          is_active: boolean | null
+          last_activity: string | null
+          location_data: Json | null
+          session_token: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          device_info?: Json | null
+          expires_at: string
+          id?: string
+          ip_address?: unknown | null
+          is_active?: boolean | null
+          last_activity?: string | null
+          location_data?: Json | null
+          session_token: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          device_info?: Json | null
+          expires_at?: string
+          id?: string
+          ip_address?: unknown | null
+          is_active?: boolean | null
+          last_activity?: string | null
+          location_data?: Json | null
+          session_token?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_stakes: {
         Row: {
           amount: number
@@ -5714,6 +5987,7 @@ export type Database = {
       }
     }
     Enums: {
+      app_role: "admin" | "moderator" | "user"
       transaction_category:
         | "topup"
         | "contribution"
@@ -5877,6 +6151,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["admin", "moderator", "user"],
       transaction_category: [
         "topup",
         "contribution",
