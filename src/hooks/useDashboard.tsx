@@ -94,7 +94,7 @@ export const useDashboard = () => {
 
   // Quick action handlers
   const handleQuickAction = (actionType: 'add_money' | 'send' | 'request_loan' | 'join_chama') => {
-    if (isOffline) {
+    if (isOffline && (actionType === 'add_money' || actionType === 'send')) {
       toast({
         title: "Offline",
         description: "Money operations are not available offline",
@@ -105,21 +105,7 @@ export const useDashboard = () => {
 
     trackDashboardEvent('quick_action_used', { type: actionType });
     
-    // These would redirect to appropriate modals/pages
-    switch (actionType) {
-      case 'add_money':
-        // Open add money modal
-        break;
-      case 'send':
-        // Open send money modal
-        break;
-      case 'request_loan':
-        // Navigate to loan request page
-        break;
-      case 'join_chama':
-        // Navigate to available chamas
-        break;
-    }
+    return actionType; // Return the action type so the component can handle it
   };
 
   return {

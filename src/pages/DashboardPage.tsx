@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDashboard } from '@/hooks/useDashboard';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import { QuickActions } from '@/components/dashboard/QuickActions';
@@ -7,6 +7,8 @@ import { SavingsGoals } from '@/components/dashboard/SavingsGoals';
 import { UpcomingContributions } from '@/components/dashboard/UpcomingContributions';
 import { RecentTransactions } from '@/components/dashboard/RecentTransactions';
 import { NotificationsAlerts } from '@/components/dashboard/NotificationsAlerts';
+import { AddMoneyModal } from '@/components/modals/AddMoneyModal';
+import { SendMoneyModal } from '@/components/modals/SendMoneyModal';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -29,10 +31,40 @@ export const DashboardPage: React.FC = () => {
     trackDashboardEvent,
   } = useDashboard();
 
+  // Modal states
+  const [showAddMoneyModal, setShowAddMoneyModal] = useState(false);
+  const [showSendMoneyModal, setShowSendMoneyModal] = useState(false);
+
   // Track dashboard view on mount
   useEffect(() => {
     trackDashboardEvent('dashboard_open');
   }, [trackDashboardEvent]);
+
+  // Handle quick actions
+  const onQuickAction = (actionType: 'add_money' | 'send' | 'request_loan' | 'join_chama') => {
+    const result = handleQuickAction(actionType);
+    if (!result) return; // Action was blocked (e.g., offline)
+
+    switch (actionType) {
+      case 'add_money':
+        setShowAddMoneyModal(true);
+        break;
+      case 'send':
+        setShowSendMoneyModal(true);
+        break;
+      case 'request_loan':
+        navigate('/apply-loan');
+        break;
+      case 'join_chama':
+        navigate('/available-chamas');
+        break;
+    }
+  };
+
+  // Handle modal success callbacks
+  const handleMoneyOperationSuccess = () => {
+    refreshDashboard(); // Refresh dashboard data after successful operation
+  };
 
   // Handle notification actions
   const handleNotificationDismiss = (notificationId: string) => {
@@ -129,7 +161,7 @@ export const DashboardPage: React.FC = () => {
             walletBalance={walletBalance}
             isOffline={isOffline}
             lastUpdated={lastUpdated}
-            onAddMoney={() => handleQuickAction('add_money')}
+            onAddMoney={() => onQuickAction('add_money')}
             onSettings={() => navigate('/settings')}
           />
         </div>
@@ -137,7 +169,7 @@ export const DashboardPage: React.FC = () => {
         {/* Quick Actions */}
         <div className="mb-8">
           <QuickActions
-            onAction={handleQuickAction}
+            onAction={onQuickAction}
             isOffline={isOffline}
           />
         </div>
@@ -190,6 +222,20 @@ export const DashboardPage: React.FC = () => {
             Refresh
           </Button>
         </div>
+
+        {/* Modals */}
+        <AddMoneyModal
+          isOpen={showAddMoneyModal}
+          onClose={() => setShowAddMoneyModal(false)}
+          onSuccess={handleMoneyOperationSuccess}
+        />
+        
+        <SendMoneyModal
+          isOpen={showSendMoneyModal}
+          onClose={() => setShowSendMoneyModal(false)}
+          onSuccess={handleMoneyOperationSuccess}
+          walletBalance={walletBalance}
+        />
       </div>
     </div>
   );
