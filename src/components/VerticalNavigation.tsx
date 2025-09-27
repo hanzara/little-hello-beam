@@ -73,6 +73,12 @@ const VerticalNavigation = () => {
       ]
     },
     {
+      title: 'Budget Tracker',
+      icon: Calculator,
+      path: '/budget-tracker',
+      badge: 'Track',
+    },
+    {
       title: 'Loans',
       icon: HandCoins,
       path: '/loan-management',

@@ -43,6 +43,7 @@ import TriviaGamePage from "./pages/TriviaGamePage";
 import MakeContributionPage from "./pages/MakeContributionPage";
 import ApplyLoanPage from "./pages/ApplyLoanPage";
 import AdminDemoPage from "./pages/AdminDemoPage";
+import BudgetTrackerPage from "./pages/BudgetTrackerPage";
 import NotFound from "./pages/NotFound";
 import DashboardPage from "./pages/DashboardPage";
 
@@ -187,6 +188,7 @@ function App() {
                         <Route path="/admin-portal" element={<AdminPortalPage />} />
                         <Route path="/admin-demo" element={<AdminDemoPage />} />
                         <Route path="/bank-portal" element={<BankPortalPage />} />
+                        <Route path="/budget-tracker" element={<BudgetTrackerPage />} />
                         <Route path="/trivia-game" element={<TriviaGamePage />} />
                         <Route path="/make-contribution" element={<MakeContributionPage />} />
                         <Route path="*" element={<NotFound />} />
