@@ -31,7 +31,7 @@ import DealDetailsModal from './DealDetailsModal';
 
 const DealsAndBillsHub: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [showBillPayment, setShowBillPayment] = useState(false);
   const [showDealDetails, setShowDealDetails] = useState(false);
   const [selectedBillProvider, setSelectedBillProvider] = useState<any>(null);
@@ -84,7 +84,7 @@ const DealsAndBillsHub: React.FC = () => {
       deal.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
       deal.merchants?.name.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesCategory = !selectedCategory || deal.merchants?.category === selectedCategory;
+    const matchesCategory = selectedCategory === 'all' || deal.merchants?.category === selectedCategory;
     
     return matchesSearch && matchesCategory;
   });
@@ -95,7 +95,7 @@ const DealsAndBillsHub: React.FC = () => {
       provider.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       provider.category.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesCategory = !selectedCategory || provider.category === selectedCategory;
+    const matchesCategory = selectedCategory === 'all' || provider.category === selectedCategory;
     
     return matchesSearch && matchesCategory;
   });
@@ -213,7 +213,7 @@ const DealsAndBillsHub: React.FC = () => {
               <SelectValue placeholder="All Categories" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Categories</SelectItem>
+              <SelectItem value="all">All Categories</SelectItem>
               <SelectItem value="telecom">Telecom</SelectItem>
               <SelectItem value="utilities">Utilities</SelectItem>
               <SelectItem value="entertainment">Entertainment</SelectItem>
@@ -223,12 +223,12 @@ const DealsAndBillsHub: React.FC = () => {
             </SelectContent>
           </Select>
           
-          {(searchTerm || selectedCategory) && (
+          {(searchTerm || selectedCategory !== 'all') && (
             <Button
               variant="outline"
               onClick={() => {
                 setSearchTerm('');
-                setSelectedCategory('');
+                setSelectedCategory('all');
               }}
               className="gap-2"
             >

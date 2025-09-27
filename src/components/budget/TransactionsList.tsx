@@ -37,8 +37,8 @@ const CATEGORIES = [
 const TransactionsList: React.FC<TransactionsListProps> = ({ transactions }) => {
   const { updateTransactionCategory } = useBudgetTracker();
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategory, setFilterCategory] = useState('');
-  const [filterType, setFilterType] = useState('');
+  const [filterCategory, setFilterCategory] = useState('all');
+  const [filterType, setFilterType] = useState('all');
   const [editingCategory, setEditingCategory] = useState<string | null>(null);
 
   // Filter transactions
@@ -48,8 +48,8 @@ const TransactionsList: React.FC<TransactionsListProps> = ({ transactions }) => 
       transaction.merchant_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       transaction.category.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesCategory = !filterCategory || transaction.budget_category === filterCategory;
-    const matchesType = !filterType || transaction.transaction_type === filterType;
+    const matchesCategory = filterCategory === 'all' || transaction.budget_category === filterCategory;
+    const matchesType = filterType === 'all' || transaction.transaction_type === filterType;
     
     return matchesSearch && matchesCategory && matchesType;
   });
@@ -97,7 +97,7 @@ const TransactionsList: React.FC<TransactionsListProps> = ({ transactions }) => 
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Categories</SelectItem>
+              <SelectItem value="all">All Categories</SelectItem>
               {CATEGORIES.map((category) => (
                 <SelectItem key={category} value={category}>
                   {category}
@@ -111,19 +111,19 @@ const TransactionsList: React.FC<TransactionsListProps> = ({ transactions }) => 
               <SelectValue placeholder="Type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Types</SelectItem>
+              <SelectItem value="all">All Types</SelectItem>
               <SelectItem value="income">Income</SelectItem>
               <SelectItem value="expense">Expense</SelectItem>
             </SelectContent>
           </Select>
           
-          {(searchTerm || filterCategory || filterType) && (
+          {(searchTerm || filterCategory !== 'all' || filterType !== 'all') && (
             <Button
               variant="outline"
               onClick={() => {
                 setSearchTerm('');
-                setFilterCategory('');
-                setFilterType('');
+                setFilterCategory('all');
+                setFilterType('all');
               }}
               className="gap-2"
             >
