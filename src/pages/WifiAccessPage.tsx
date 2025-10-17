@@ -11,10 +11,12 @@ import { WifiWallet } from '@/components/wifi/WifiWallet';
 import { ActiveSessions } from '@/components/wifi/ActiveSessions';
 import { TransactionHistory } from '@/components/wifi/TransactionHistory';
 import { useAuth } from '@/hooks/useAuth';
+import { useWifiStats } from '@/hooks/useWifiStats';
 import { Wifi, MapPin, Clock, CreditCard, AlertCircle } from 'lucide-react';
 
 const WifiAccessPage = () => {
   const { user } = useAuth();
+  const { data: stats, isLoading: statsLoading } = useWifiStats();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   
@@ -70,7 +72,9 @@ const WifiAccessPage = () => {
                 <MapPin className="h-4 w-4 text-blue-500 flex-shrink-0" />
                 <div className="min-w-0">
                   <p className="text-xs sm:text-sm text-muted-foreground truncate">Nearby Hotspots</p>
-                  <p className="text-base sm:text-lg font-semibold">12</p>
+                  <p className="text-base sm:text-lg font-semibold">
+                    {statsLoading ? '...' : stats?.nearbyHotspots || 0}
+                  </p>
                 </div>
               </div>
             </Card>
@@ -79,7 +83,9 @@ const WifiAccessPage = () => {
                 <Clock className="h-4 w-4 text-green-500 flex-shrink-0" />
                 <div className="min-w-0">
                   <p className="text-xs sm:text-sm text-muted-foreground truncate">Active Sessions</p>
-                  <p className="text-base sm:text-lg font-semibold">1</p>
+                  <p className="text-base sm:text-lg font-semibold">
+                    {statsLoading ? '...' : stats?.activeSessions || 0}
+                  </p>
                 </div>
               </div>
             </Card>
@@ -88,7 +94,9 @@ const WifiAccessPage = () => {
                 <CreditCard className="h-4 w-4 text-purple-500 flex-shrink-0" />
                 <div className="min-w-0">
                   <p className="text-xs sm:text-sm text-muted-foreground truncate">Wallet Balance</p>
-                  <p className="text-base sm:text-lg font-semibold">KES 850</p>
+                  <p className="text-base sm:text-lg font-semibold">
+                    {statsLoading ? '...' : `KES ${stats?.walletBalance.toFixed(2) || '0.00'}`}
+                  </p>
                 </div>
               </div>
             </Card>
@@ -97,7 +105,9 @@ const WifiAccessPage = () => {
                 <Wifi className="h-4 w-4 text-orange-500 flex-shrink-0" />
                 <div className="min-w-0">
                   <p className="text-xs sm:text-sm text-muted-foreground truncate">Data Used Today</p>
-                  <p className="text-base sm:text-lg font-semibold">2.3 GB</p>
+                  <p className="text-base sm:text-lg font-semibold">
+                    {statsLoading ? '...' : `${stats?.dataUsedToday || '0.0'} GB`}
+                  </p>
                 </div>
               </div>
             </Card>
