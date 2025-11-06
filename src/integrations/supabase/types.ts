@@ -25,12 +25,9 @@ export type Database = {
           mode: string | null
           name: string
           progress: number | null
-          repository_id: string
-          scope: string | null
+          repository_id: string | null
           started_at: string | null
           status: string | null
-          target_module: string | null
-          test_suite: string | null
           updated_at: string | null
         }
         Insert: {
@@ -43,12 +40,9 @@ export type Database = {
           mode?: string | null
           name: string
           progress?: number | null
-          repository_id: string
-          scope?: string | null
+          repository_id?: string | null
           started_at?: string | null
           status?: string | null
-          target_module?: string | null
-          test_suite?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -61,12 +55,9 @@ export type Database = {
           mode?: string | null
           name?: string
           progress?: number | null
-          repository_id?: string
-          scope?: string | null
+          repository_id?: string | null
           started_at?: string | null
           status?: string | null
-          target_module?: string | null
-          test_suite?: string | null
           updated_at?: string | null
         }
         Relationships: [
@@ -79,46 +70,352 @@ export type Database = {
           },
         ]
       }
-      genome_analyses: {
+      genome_dependencies: {
+        Row: {
+          created_at: string | null
+          genome_id: string | null
+          id: string
+          name: string
+          type: string | null
+          version: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          genome_id?: string | null
+          id?: string
+          name: string
+          type?: string | null
+          version?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          genome_id?: string | null
+          id?: string
+          name?: string
+          type?: string | null
+          version?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "genome_dependencies_genome_id_fkey"
+            columns: ["genome_id"]
+            isOneToOne: false
+            referencedRelation: "genomes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      genome_functions: {
+        Row: {
+          complexity: number | null
+          created_at: string | null
+          genome_id: string | null
+          id: string
+          lines_of_code: number | null
+          module_id: string | null
+          name: string
+        }
+        Insert: {
+          complexity?: number | null
+          created_at?: string | null
+          genome_id?: string | null
+          id?: string
+          lines_of_code?: number | null
+          module_id?: string | null
+          name: string
+        }
+        Update: {
+          complexity?: number | null
+          created_at?: string | null
+          genome_id?: string | null
+          id?: string
+          lines_of_code?: number | null
+          module_id?: string | null
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "genome_functions_genome_id_fkey"
+            columns: ["genome_id"]
+            isOneToOne: false
+            referencedRelation: "genomes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "genome_functions_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "genome_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      genome_health: {
+        Row: {
+          created_at: string | null
+          details: Json | null
+          genome_id: string | null
+          id: string
+          metric_name: string
+          score: number | null
+          status: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          details?: Json | null
+          genome_id?: string | null
+          id?: string
+          metric_name: string
+          score?: number | null
+          status?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          details?: Json | null
+          genome_id?: string | null
+          id?: string
+          metric_name?: string
+          score?: number | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "genome_health_genome_id_fkey"
+            columns: ["genome_id"]
+            isOneToOne: false
+            referencedRelation: "genomes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      genome_modules: {
+        Row: {
+          complexity: number | null
+          created_at: string | null
+          dependencies_count: number | null
+          genome_id: string | null
+          id: string
+          lines_of_code: number | null
+          name: string
+          path: string | null
+        }
+        Insert: {
+          complexity?: number | null
+          created_at?: string | null
+          dependencies_count?: number | null
+          genome_id?: string | null
+          id?: string
+          lines_of_code?: number | null
+          name: string
+          path?: string | null
+        }
+        Update: {
+          complexity?: number | null
+          created_at?: string | null
+          dependencies_count?: number | null
+          genome_id?: string | null
+          id?: string
+          lines_of_code?: number | null
+          name?: string
+          path?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "genome_modules_genome_id_fkey"
+            columns: ["genome_id"]
+            isOneToOne: false
+            referencedRelation: "genomes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      genome_packages: {
+        Row: {
+          created_at: string | null
+          genome_id: string | null
+          id: string
+          name: string
+          size_kb: number | null
+          version: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          genome_id?: string | null
+          id?: string
+          name: string
+          size_kb?: number | null
+          version?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          genome_id?: string | null
+          id?: string
+          name?: string
+          size_kb?: number | null
+          version?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "genome_packages_genome_id_fkey"
+            columns: ["genome_id"]
+            isOneToOne: false
+            referencedRelation: "genomes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      genome_suggestions: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          genome_id: string | null
+          id: string
+          impact_score: number | null
+          priority: string | null
+          title: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          genome_id?: string | null
+          id?: string
+          impact_score?: number | null
+          priority?: string | null
+          title: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          genome_id?: string | null
+          id?: string
+          impact_score?: number | null
+          priority?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "genome_suggestions_genome_id_fkey"
+            columns: ["genome_id"]
+            isOneToOne: false
+            referencedRelation: "genomes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      genomes: {
         Row: {
           complexity_score: number | null
           created_at: string | null
-          efficiency_score: number | null
-          genome_data: Json | null
+          health_score: number | null
           id: string
-          performance_metrics: Json | null
-          repository_id: string
-          security_issues: Json | null
+          repository_id: string | null
+          total_dependencies: number | null
+          total_functions: number | null
+          total_modules: number | null
+          updated_at: string | null
+          version: string | null
         }
         Insert: {
           complexity_score?: number | null
           created_at?: string | null
-          efficiency_score?: number | null
-          genome_data?: Json | null
+          health_score?: number | null
           id?: string
-          performance_metrics?: Json | null
-          repository_id: string
-          security_issues?: Json | null
+          repository_id?: string | null
+          total_dependencies?: number | null
+          total_functions?: number | null
+          total_modules?: number | null
+          updated_at?: string | null
+          version?: string | null
         }
         Update: {
           complexity_score?: number | null
           created_at?: string | null
-          efficiency_score?: number | null
-          genome_data?: Json | null
+          health_score?: number | null
           id?: string
-          performance_metrics?: Json | null
-          repository_id?: string
-          security_issues?: Json | null
+          repository_id?: string | null
+          total_dependencies?: number | null
+          total_functions?: number | null
+          total_modules?: number | null
+          updated_at?: string | null
+          version?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "genome_analyses_repository_id_fkey"
+            foreignKeyName: "genomes_repository_id_fkey"
             columns: ["repository_id"]
             isOneToOne: false
             referencedRelation: "repositories"
             referencedColumns: ["id"]
           },
         ]
+      }
+      lesson_comments: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          lesson_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          lesson_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          lesson_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_comments_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lessons: {
+        Row: {
+          category: string | null
+          content: string | null
+          created_at: string | null
+          difficulty: string | null
+          duration_minutes: number | null
+          id: string
+          title: string
+          xp_points: number | null
+        }
+        Insert: {
+          category?: string | null
+          content?: string | null
+          created_at?: string | null
+          difficulty?: string | null
+          duration_minutes?: number | null
+          id?: string
+          title: string
+          xp_points?: number | null
+        }
+        Update: {
+          category?: string | null
+          content?: string | null
+          created_at?: string | null
+          difficulty?: string | null
+          duration_minutes?: number | null
+          id?: string
+          title?: string
+          xp_points?: number | null
+        }
+        Relationships: []
       }
       mutation_history: {
         Row: {
@@ -127,7 +424,7 @@ export type Database = {
           created_at: string | null
           id: string
           metadata: Json | null
-          mutation_id: string
+          mutation_id: string | null
         }
         Insert: {
           action: string
@@ -135,7 +432,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           metadata?: Json | null
-          mutation_id: string
+          mutation_id?: string | null
         }
         Update: {
           action?: string
@@ -143,51 +440,12 @@ export type Database = {
           created_at?: string | null
           id?: string
           metadata?: Json | null
-          mutation_id?: string
+          mutation_id?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "mutation_history_mutation_id_fkey"
             columns: ["mutation_id"]
-            isOneToOne: false
-            referencedRelation: "mutations"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      mutation_lineage: {
-        Row: {
-          child_id: string
-          created_at: string | null
-          crossover_type: string | null
-          id: string
-          parent_id: string
-        }
-        Insert: {
-          child_id: string
-          created_at?: string | null
-          crossover_type?: string | null
-          id?: string
-          parent_id: string
-        }
-        Update: {
-          child_id?: string
-          created_at?: string | null
-          crossover_type?: string | null
-          id?: string
-          parent_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "mutation_lineage_child_id_fkey"
-            columns: ["child_id"]
-            isOneToOne: false
-            referencedRelation: "mutations"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "mutation_lineage_parent_id_fkey"
-            columns: ["parent_id"]
             isOneToOne: false
             referencedRelation: "mutations"
             referencedColumns: ["id"]
@@ -202,7 +460,7 @@ export type Database = {
           id: string
           latency_ms: number | null
           memory_usage: number | null
-          mutation_id: string
+          mutation_id: string | null
           pass_rate: number | null
           test_results: Json | null
         }
@@ -213,7 +471,7 @@ export type Database = {
           id?: string
           latency_ms?: number | null
           memory_usage?: number | null
-          mutation_id: string
+          mutation_id?: string | null
           pass_rate?: number | null
           test_results?: Json | null
         }
@@ -224,7 +482,7 @@ export type Database = {
           id?: string
           latency_ms?: number | null
           memory_usage?: number | null
-          mutation_id?: string
+          mutation_id?: string | null
           pass_rate?: number | null
           test_results?: Json | null
         }
@@ -256,8 +514,7 @@ export type Database = {
           mutated_code: string | null
           mutation_type: string
           original_code: string | null
-          parent_mutations: string[] | null
-          repository_id: string
+          repository_id: string | null
           safety_score: number | null
           status: string | null
         }
@@ -278,8 +535,7 @@ export type Database = {
           mutated_code?: string | null
           mutation_type: string
           original_code?: string | null
-          parent_mutations?: string[] | null
-          repository_id: string
+          repository_id?: string | null
           safety_score?: number | null
           status?: string | null
         }
@@ -300,8 +556,7 @@ export type Database = {
           mutated_code?: string | null
           mutation_type?: string
           original_code?: string | null
-          parent_mutations?: string[] | null
-          repository_id?: string
+          repository_id?: string | null
           safety_score?: number | null
           status?: string | null
         }
@@ -326,40 +581,63 @@ export type Database = {
         Row: {
           created_at: string | null
           description: string | null
-          framework: string | null
-          github_url: string | null
           id: string
-          language: string | null
           name: string
-          size_kb: number | null
           updated_at: string | null
           url: string | null
         }
         Insert: {
           created_at?: string | null
           description?: string | null
-          framework?: string | null
-          github_url?: string | null
           id?: string
-          language?: string | null
           name: string
-          size_kb?: number | null
           updated_at?: string | null
           url?: string | null
         }
         Update: {
           created_at?: string | null
           description?: string | null
-          framework?: string | null
-          github_url?: string | null
           id?: string
-          language?: string | null
           name?: string
-          size_kb?: number | null
           updated_at?: string | null
           url?: string | null
         }
         Relationships: []
+      }
+      user_progress: {
+        Row: {
+          completed: boolean | null
+          created_at: string | null
+          id: string
+          lesson_id: string | null
+          quiz_score: number | null
+          user_id: string | null
+        }
+        Insert: {
+          completed?: boolean | null
+          created_at?: string | null
+          id?: string
+          lesson_id?: string | null
+          quiz_score?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          completed?: boolean | null
+          created_at?: string | null
+          id?: string
+          lesson_id?: string | null
+          quiz_score?: number | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_progress_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
