@@ -9,7 +9,8 @@ import {
   FileCode,
   Shield,
   Zap,
-  CreditCard
+  CreditCard,
+  BarChart3
 } from "lucide-react";
 import {
   Sidebar,
@@ -28,6 +29,7 @@ const menuItems = [
   { title: "Upload App", url: "/software-healing/upload", icon: Upload },
   { title: "DNA Scanner", url: "/software-healing/scanner", icon: Dna },
   { title: "Evolution Engine", url: "/software-healing/evolution", icon: TrendingUp },
+  { title: "LiveBench 📊", url: "/software-healing/livebench", icon: BarChart3 },
   { title: "Monitoring", url: "/software-healing/monitoring", icon: Activity },
   { title: "Code Analysis", url: "/software-healing/analysis", icon: FileCode },
   { title: "Security", url: "/software-healing/security", icon: Shield },
